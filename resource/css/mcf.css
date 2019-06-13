@@ -1,0 +1,25 @@
+.clearfix {
+	overflow: auto;
+	_height: 1%
+}
+
+body{
+	padding: 10px;
+}
+
+.tab-pane{
+	padding: 10px;
+}
+
+.content {
+	margin-top: 10px;
+}
+.page4-sapn{
+	display: inline-block;
+	width: 200px;
+	text-align: right;
+	padding-right: 10px;
+}
+#mintingProxyTable button{
+	margin-left: 10px;
+}

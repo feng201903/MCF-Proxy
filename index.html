@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>proxy</title>
+		<link href="resource/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="resource/layui/css/layui.css" />
+		<link href="resource/css/mcf.css" rel="stylesheet">
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<div>
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs nav-justified" role="tablist">
+				<li role="presentation" class="active"><a href="#peer" aria-controls="peer" role="tab" data-toggle="tab">节点</a></li>
+				<li role="presentation"><a href="#minting" aria-controls="minting" role="tab" data-toggle="tab">挖矿</a></li>
+				<li role="presentation"><a href="#proxy" aria-controls="proxy" role="tab" data-toggle="tab">代理挖矿专用</a></li>
+				<li role="presentation"><a href="#account" aria-controls="account" role="tab" data-toggle="tab">账户</a></li>
+				<li role="presentation"><a href="#enable" aria-controls="enable" role="tab" data-toggle="tab">授权子账户</a></li>
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+
+				<!-- 节点 -->
+				<div role="tabpanel" class="tab-pane active" id="peer">
+					<div class="panel panel-default">
+						<!-- Default panel contents -->
+						<div class="panel-heading clearfix">节点列表
+							<button type="button" class="btn btn-info btn-sm" onclick="loadPeers()" style="float: right;">刷新列表</button>
+						</div>
+						<div class="panel-body">
+							<!-- Nav tabs -->
+							<ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active"><a href="#page1" aria-controls="page1" role="tab" data-toggle="tab">已连接列表</a></li>
+								<li role="presentation"><a href="#page2" aria-controls="page2" role="tab" data-toggle="tab">可连接列表</a></li>
+							</ul>
+
+							<!-- Tab panes -->
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="page1">
+									<div style="height: 450px;overflow-x: hidden; overflow-y: scroll;">
+										<!-- Table -->
+										<table class="table">
+											<thead>
+												<tr>
+													<th>node</th>
+													<th>ping</th>
+													<th>state</th>
+													<th>operation</th>
+												</tr>
+											</thead>
+											<tbody id="listPeers">
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div role="tabpanel" class="tab-pane" id="page2">
+									<div style="height: 450px;overflow-x: hidden; overflow-y: scroll;">
+										<!-- Table -->
+										<table class="table">
+											<thead>
+												<tr>
+													<th>node</th>
+													<!-- <th>ping</th>
+													<th>state</th> -->
+													<th>operation</th>
+												</tr>
+											</thead>
+											<tbody id="listPeersKnown">
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="panel-footer clearfix" style="text-align: right;">
+							<div class="form-group">
+								<input type="text" class="form-control" id="nodeAddress" placeholder="node address" style="width: 80%;float: left;"
+								 value="" autocomplete="off">
+								<button class="btn" onclick="changeNodeState('add')">手动添加节点</button>
+								<button class="btn" onclick="changeNodeState('del')">手动移除节点</button>
+							</div>
+							<div class="form-group">
+								<button type="button" class="btn btn-danger" onclick="removeAllPeers()">清除全部可连接节点</button>
+							</div>
+							<div class="form-horizontal">
+								<label class="col-sm-2 control-label" style="text-align: center;padding-top:0px;">区块同步状态</label>
+								<div class="col-sm-6">
+									<div class="progress" style="background-color: #d2d2d2;">
+										<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0"
+										 aria-valuemax="100" style="min-width:30px;" id="blocksProgress">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 节点 END -->
+
+				<!-- 挖矿 -->
+				<div role="tabpanel" class="tab-pane" id="minting">
+					<!-- 挖矿 绑定账号 -->
+					<div class="panel panel-default">
+						<div class="panel-heading">绑定账号</div>
+						<div class="panel-body">
+							<div class="form-horizontal">
+								<div id="infoBody">
+									<div class="form-group">
+										<label for="mintingAccountList" class="col-sm-2 control-label">授权地址</label>
+										<div class="col-sm-10">
+											<select class="form-control" id="mintingAccountList">
+
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="createProxyRecipientAccount" class="col-sm-2 control-label">被授权地址</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="createProxyRecipientAccount" value="">
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="createProxyShare" class="col-sm-2 control-label">授权比例</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="createProxyShare" value="">
+										</div>
+									</div>
+
+
+									<div class="form-group">
+										<label for="words" class="col-sm-2 control-label"></label>
+										<div class="col-sm-10">
+											<button type="button" class="btn btn-success" onclick="createProxy()">提交</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 挖矿 绑定账号 END-->
+
+					<!-- 挖矿 账户关系列表 -->
+					<div class="panel panel-default">
+						<div class="panel-heading clearfix">账户关系
+							<button type="button" class="btn btn-info btn-sm" onclick="loadMintingProxyTable()" style="float: right;">刷新列表</button>
+						</div>
+						<div class="panel-body">
+							<div style="height: 300px;overflow-x: hidden; overflow-y: scroll;">
+								<!-- Table -->
+								<table class="table">
+									<thead>
+										<tr>
+											<th>授权地址</th>
+											<th>被授权地址</th>
+											<th>比例</th>
+											<th>出块数量</th>
+											<th>状态</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody id="mintingProxyTable">
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- 挖矿 账户关系列表 END -->
+
+				</div>
+				<!-- 挖矿 END -->
+
+				<!-- 代理挖矿 -->
+				<div role="tabpanel" class="tab-pane" id="proxy">
+					<!-- 代理挖矿 账户关系列表 -->
+					<div class="panel panel-default">
+						<div class="panel-heading clearfix">账户关系
+							<button type="button" class="btn btn-info btn-sm" onclick="loadRecipientProxyTable()" style="float: right;">刷新列表</button>
+						</div>
+						<div class="panel-body">
+							<div style="height: 500px;overflow-x: hidden; overflow-y: scroll;">
+								<!-- Table -->
+								<table class="table">
+									<thead>
+										<tr>
+											<th>授权地址</th>
+											<th>被授权地址</th>
+											<th>比例</th>
+											<th>出块数量</th>
+											<th>状态</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody id="recipientProxyTable">
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- 挖矿 账户关系列表 END -->
+				</div>
+				<!-- 代理挖矿 END -->
+
+				<!-- 账户 -->
+				<div role="tabpanel" class="tab-pane" id="account">
+					<!-- 账户 创建账户 -->
+					<div class="panel panel-default">
+						<div class="panel-heading">创建账户</div>
+						<div class="panel-body">
+							<div class="form-horizontal">
+								<div id="infoBody">
+									<div class="form-group">
+										<label for="" class="col-sm-2 control-label">
+											
+										</label>
+										<div class="col-sm-10">
+											<button type="button" class="btn btn-success" onclick="createAccount()">创建账户</button>
+											<button type="button" class="btn btn-success" onclick="clearCreate()">清空</button>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="createdAccountW" class="col-sm-2 control-label">生成的助记词为</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="createdAccountW" value="" autocomplete="off" readonly="readonly">
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="createdAccountA" class="col-sm-2 control-label">生成的钱包地址为</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="createdAccountA" value="" autocomplete="off" readonly="readonly">
+											<p>请把这些单词按顺序(区分大小写) 记录在纸上保存好 需要此助记词才能访问你自己的账户</p>
+											<p style="color: red;">注意永远不要泄露你的助记词,<br>如果你失去了它,你就无法进入你的账户</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 账户 创建账户 END-->
+
+					<!-- 账户 添加账户 -->
+					<div class="panel panel-default">
+						<div class="panel-heading">添加账户</div>
+						<div class="panel-body">
+							<div class="form-horizontal">
+								<div id="infoBody">
+									<div class="form-group">
+										<label for="mnemonicPhrase" class="col-sm-2 control-label">助记词</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="mnemonicPhrase" value="" autocomplete="off">
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="addAccountPwd1" class="col-sm-2 control-label">请输入密码</label>
+										<div class="col-sm-10">
+											<input type="password" class="form-control" id="addAccountPwd1" value="">
+											<span style="color: red;">密码长度为8-24，至少包含数字，大写英文，小写英文和特殊符号中的三种</span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="addAccountPwd2" class="col-sm-2 control-label">再次确认密码</label>
+										<div class="col-sm-10">
+											<input type="password" class="form-control" id="addAccountPwd2" value="">
+										</div>
+									</div>
+
+
+									<div class="form-group">
+										<label for="words" class="col-sm-2 control-label"></label>
+										<div class="col-sm-10">
+											<button type="button" class="btn btn-success" onclick="addAccount()">添加账户</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 账户 添加账户 END-->
+
+					<!-- 账户 账户列表 -->
+					<div class="panel panel-default">
+						<div class="panel-heading clearfix">账户列表
+							<button type="button" class="btn btn-info btn-sm" onclick="loadAccountsList()" style="float: right;">刷新列表</button>
+						</div>
+						<div class="panel-body">
+							<div style="height: 300px;overflow-x: hidden; overflow-y: scroll;">
+								<!-- Table -->
+								<table class="table">
+									<thead>
+										<tr>
+											<th>地址</th>
+											<th>状态</th>
+											<th>操作</th>
+											<th>激活状态</th>
+										</tr>
+									</thead>
+									<tbody id="page4AccountList">
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- 账户 账户列表 END -->
+
+					<!-- 账户 转账 -->
+					<div class="panel panel-default">
+						<div class="panel-heading">转账</div>
+						<div class="panel-body">
+							<div class="form-horizontal">
+								<div id="infoBody">
+									<div class="form-group">
+										<label for="mnemonicPhrase" class="col-sm-2 control-label">转出地址</label>
+										<div class="col-sm-10">
+											<select class="form-control" id="transferAccountList">
+
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="mnemonicPhrase" class="col-sm-2 control-label">转账种类</label>
+										<div class="col-sm-10">
+											<select class="form-control" id="transferAccountAssetsList">
+												<!-- <option value="0"></option> -->
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="transferRecipientAccount" class="col-sm-2 control-label">收款地址</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="transferRecipientAccount" value="">
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="transferRecipientAccount" class="col-sm-2 control-label">转账金额</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="transferAmount" value="">
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="transferRecipientAccount" class="col-sm-2 control-label">转账手续费</label>
+										<div class="col-sm-10">
+											<span class="form-control">0.00001MCF</span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="words" class="col-sm-2 control-label"></label>
+										<div class="col-sm-10">
+											<button type="button" class="btn btn-success" onclick="tryTransfer()">确定</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 账户 转账 END-->
+				</div>
+				<!-- 账户 END-->
+
+				<!-- 授权子账户 -->
+				<div role="tabpanel" class="tab-pane" id="enable">
+					<!-- 授权子账户 账户列表 -->
+					<div class="panel panel-default">
+						<div class="panel-heading clearfix">账户列表
+							<button type="button" class="btn btn-info btn-sm" onclick="" style="float: right;">刷新列表</button>
+						</div>
+						<div class="panel-body">
+							<div style="height: 600px;overflow-x: hidden; overflow-y: scroll;">
+								<!-- Table -->
+								<table class="table">
+									<thead>
+										<tr>
+											<th>授权地址</th>
+											<th>出块数量</th>
+											<th>级别</th>
+											<th>状态</th>
+											<th>被授权地址</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody id="page5AccountList">
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- 授权子账户 账户列表 END -->
+				</div>
+				<!-- 授权子账户 END-->
+
+			</div>
+		</div>
+
+		<script src="resource/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/mcf.js" type="text/javascript" charset="utf-8"></script>
+		<!-- <script src="resource/js/a/unorm.js" type="text/javascript" charset="utf-8"></script> -->
+		<script src="resource/js/a/wordlist_english.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 
+		<script src="resource/js/a/wordlist_chinese_simplified.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/a/wordlist_chinese_traditional.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/a/wordlist_french.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/a/wordlist_italian.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/a/wordlist_japanese.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/a/wordlist_korean.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/a/wordlist_spanish.js" type="text/javascript" charset="utf-8"></script> -->
+		<script src="resource/js/a/Base58.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/a/crypto-js.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/a/jsbip39.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/a/sha256.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/a/sjcl-bip39.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/js/a/nacl_factory.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var cachedPrivateKeys = {};
+			var action;
+			var changeProxyStateM = "";
+			var changeProxyStateR = "";
+			var changeProxyStateS = "";
+			$(function() {
+				loadPeers(); //加载节点信息列表
+				reloadData();
+
+				window.setInterval(getBlockProgress, 10000);
+			})
+			
+			function clearCreate(){
+				$("#createdAccountW").val('');
+				$("#createdAccountA").val('');
+			}
+			//创建钱包地址
+			function createAccount() {
+				nacl_factory.instantiate(function(nacl) {
+					var mnemo = new Mnemonic("english");
+					var hexStr = nacl.to_hex(nacl.random_bytes(16));
+					var code = mnemo.toMnemonic(hexStringToArray(hexStr));
+					var privateKeyHex = nacl.to_hex(nacl.crypto_hash_sha256(nacl.from_hex(hexStr)));
+					var kp = nacl.crypto_sign_seed_keypair(nacl.from_hex(privateKeyHex));
+					var publicKey = Base58.encode(kp.signPk);
+					addr = getAccountAddressFromPublicKey(publicKey);
+
+					$("#createdAccountW").val(code);
+					$("#createdAccountA").val(addr);
+				});
+			}
+
+			function reloadData() {
+				loadAccountsList(); //加载账号列表
+				loadMintingAccountsList(); //加载 挖矿 页面下拉菜单选项
+				loadMintingProxyTable(); //加载 挖矿 页面表格
+				loadRecipientProxyTable(); //加载 代理挖矿 页面表格
+				loadPage5AccountList(); //加载授权子账户列表
+			}
+
+
+			function loadPage5AccountList() {
+				var accountInfo = getLocalStorage('accountInfo');
+				for (var i = 0; i < accountInfo.length; i++) {
+					axios.get(BASEURL + '/addresses/' + accountInfo[i].account)
+						.then(function(res) {
+							var aInfo = res.data;
+							var aLevel = "";
+							var blocksCount = 0;
+							var state = "";
+							var btnHtml = "";
+							var inputHtml = '<input value="" id="' + aInfo.address + '"/ placeholder="输入待授权地址" style="width:300px">';
+							if (aInfo.flags == 1) {
+								aLevel = "创世";
+								axios.all([getBlocksForgers(aInfo.address)])
+									.then(axios.spread(function(blocksForgers) {
+
+										var bfInfo = blocksForgers.data;
+										for (var j = 0, bfInfoLen = bfInfo.length; j < bfInfoLen; j++) {
+											blocksCount += bfInfo[j].blockCount;
+										}
+										if (blocksCount >= 2500) {
+											state = "已达标";
+											btnHtml = '<button class="btn btn-sm" onclick = "enable(\'' + aInfo.address + '\')">授权</button>';
+										} else {
+											state = "未达标";
+											// btnHtml = '<button class="btn btn-sm" disabled="disabled">授权</button>';
+											btnHtml = '<button class="btn btn-sm" onclick = "enable(\'' + aInfo.address + '\')">授权</button>';
+										}
+
+										var html = '<tr><th scope="row">' + aInfo.address + '</th><td>' + blocksCount + '</td><td>' + aLevel +
+											'</td><td>' + state + '</td><td>' + inputHtml + '</td><td>' + btnHtml + '</td></tr>'
+										$("#page5AccountList").append(html);
+									}))
+									.catch(function(error) {
+										console.log(error);
+										alert(error.data.message);
+									});
+							}
+
+							if (aInfo.flags == 2) {
+								aLevel = "二代";
+								axios.all([getBlocksForgers(aInfo.address)])
+									.then(axios.spread(function(blocksForgers) {
+
+										var bfInfo = blocksForgers.data;
+										for (var j = 0, bfInfoLen = bfInfo.length; j < bfInfoLen; j++) {
+											blocksCount += bfInfo[j].blockCount;
+										}
+										if (blocksCount >= 25) {
+											state = "已达标";
+											btnHtml = '<button class="btn btn-sm" onClick = "enable(\'' + aInfo.address + '\')">授权</button>';
+										} else {
+											state = "未达标";
+											// btnHtml = '<button class="btn btn-sm" disabled="disabled">授权</button>';
+											btnHtml = '<button class="btn btn-sm" onClick = "enable(\'' + aInfo.address + '\')">授权</button>';
+										}
+
+										var html = '<tr><th scope="row">' + aInfo.address + '</th><td>' + blocksCount + '</td><td>' + aLevel +
+											'</td><td>' + state + '</td><td>' + inputHtml + '</td><td>' + btnHtml + '</td></tr>'
+										$("#page5AccountList").append(html);
+									}))
+									.catch(function(error) {
+										console.log(error);
+										alert(error.data.message);
+									});
+							}
+
+						})
+						.catch(function(error) {
+							console.log(error);
+						});
+				}
+
+			}
+
+			//授权子账户
+			function enable(mintingAccount) {
+				var recipientAccount = $("#" + mintingAccount).val();
+				if (!recipientAccount) {
+					alert("被授权地址不能为空");
+					return;
+				}
+				var privateKey = getPrivateKey(mintingAccount, enable, mintingAccount);
+				if (privateKey) {
+					nacl_factory.instantiate(function(nacl) {
+						var mintingAccountPrk = privateKey;
+						axios.all([getAddressInfo(mintingAccount), getAddressInfo(recipientAccount)])
+							.then(axios.spread(function(mInfo, rInfo) {
+								if (!rInfo.data.publicKey || !mInfo.data.publicKey) {
+									alert("授权地址或被授权地址未激活");
+									return false;
+								}
+
+								var head = "00000025";
+								var timestamp = strAddZero(parseInt(new Date().getTime()).toString(16), 16);
+								var TxGroupId = "00000000";
+								var reference = nacl.to_hex(Base58.decode(mInfo.data.reference));
+								var spk = nacl.to_hex(Base58.decode(mInfo.data.publicKey));
+								var recipient = nacl.to_hex(Base58.decode(recipientAccount));
+								var fee = strAddZero(parseInt(FEE * 100000000).toString(16), 16);
+								var signStr = head + timestamp + TxGroupId + reference + spk + recipient + fee;
+								signStr = Base58.encode(nacl.from_hex(signStr));
+
+								var trBytes = Base58.decode(signStr);
+								var kp1 = nacl.crypto_sign_seed_keypair(Base58.decode(mintingAccountPrk));
+								var c = nacl.crypto_sign_detached(trBytes, kp1.signSk);
+								var buffer1 = new Uint8Array(trBytes);
+								var buffer2 = new Uint8Array(c);
+								var tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+								tmp.set(buffer1, 0);
+								tmp.set(buffer2, buffer1.byteLength);
+
+								// return;
+								axios.post(BASEURL + '/transactions/process', Base58.encode(tmp))
+									.then(function(res) {
+										if (res.data === true) {
+											alert('已提交');
+										}
+									})
+									.catch(function(error) {
+										console.log(error);
+										alert(error.data.message);
+									});
+
+							}))
+							.catch(function(error) {
+								console.log(error);
+								alert(error.data.message);
+							});
+
+					});
+				}
+			}
+
+			//创建代理关系
+			function createProxy() {
+				var mintingAccount = $('#mintingAccountList option:selected').val();
+				var recipientAccount = $('#createProxyRecipientAccount').val();
+				var share = $('#createProxyShare').val();
+
+				var privateKey = getPrivateKey(mintingAccount, createProxy);
+				if (privateKey) {
+					nacl_factory.instantiate(function(nacl) {
+						var mintingAccountPrk = privateKey;
+						axios.all([getAddressInfo(mintingAccount), getAddressInfo(recipientAccount)])
+							.then(axios.spread(function(mInfo, rInfo) {
+								if (!rInfo.data.publicKey || !mInfo.data.publicKey) {
+									alert("授权地址或被授权地址未激活");
+									return false;
+								}
+								var mintingAccountPrkB58 = Base58.decode(mintingAccountPrk);
+								var recipientAccountPukB85 = Base58.decode(rInfo.data.publicKey);
+								var mintingEd25519KeyPair = nacl.crypto_sign_seed_keypair(mintingAccountPrkB58);
+								var mintingX25519KeyPair = nacl.crypto_box_keypair_from_sign_sk(mintingEd25519KeyPair.signSk);
+								var mintingX25519Prk = mintingX25519KeyPair.boxSk;
+								// var mintingAccountPuk = mintingEd25519KeyPair.signPk;
+								recipientAccountX25519Puk = nacl.crypto_box_pk_from_sign_pk(recipientAccountPukB85)
+								var sharedSecret = nacl.crypto_scalarmult(mintingX25519Prk, recipientAccountX25519Puk);
+								var proxyPrivateKey = nacl.crypto_hash_sha256(sharedSecret)
+								var proxyKeyPair = nacl.crypto_sign_seed_keypair(proxyPrivateKey);
+
+								var head = "00000026";
+								var timestamp = strAddZero(parseInt(new Date().getTime()).toString(16), 16);
+								var TxGroupId = "00000000";
+								var reference = nacl.to_hex(Base58.decode(mInfo.data.reference));
+								var spk = nacl.to_hex(Base58.decode(mInfo.data.publicKey));
+								var recipient = nacl.to_hex(Base58.decode(recipientAccount));
+								var proxyPuk = nacl.to_hex(Base58.decode(Base58.encode(proxyKeyPair.signPk)));
+								share = strAddZero(parseInt(share * 100000000).toString(16), 16);
+								var fee = strAddZero(parseInt(FEE * 100000000).toString(16), 16);
+								var signStr = head + timestamp + TxGroupId + reference + spk + recipient + proxyPuk + share + fee;
+								signStr = Base58.encode(nacl.from_hex(signStr));
+
+								var trBytes = Base58.decode(signStr);
+								var kp1 = nacl.crypto_sign_seed_keypair(Base58.decode(mintingAccountPrk));
+								var c = nacl.crypto_sign_detached(trBytes, kp1.signSk);
+								var buffer1 = new Uint8Array(trBytes);
+								var buffer2 = new Uint8Array(c);
+								var tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+								tmp.set(buffer1, 0);
+								tmp.set(buffer2, buffer1.byteLength);
+
+								// return;
+								axios.post(BASEURL + '/transactions/process', Base58.encode(tmp))
+									.then(function(res) {
+										if (res.data === true) {
+											alert('已提交');
+										}
+									})
+									.catch(function(error) {
+										console.log(error);
+										alert(error.data.message);
+									});
+
+							}))
+							.catch(function(error) {
+								console.log(error);
+								alert(error.data.message);
+							});
+
+					});
+
+				}
+			}
+
+			//激活账户
+			function activateAcount(account) {
+				var privateKey = getPrivateKey(account, activateAcount, account);
+				if (privateKey) {
+					nacl_factory.instantiate(function(nacl) {
+						var privateKeyHex = nacl.to_hex((Base58.decode(privateKey)));
+						var kp = nacl.crypto_sign_seed_keypair(nacl.from_hex(privateKeyHex));
+						var publicKey = Base58.encode(kp.signPk);
+						//时间戳
+						var timestamp = strAddZero(parseInt(new Date().getTime()).toString(16), 16);
+						axios.get(BASEURL + '/addresses/' + account)
+							.then(function(res) {
+								if (!res.data.reference) {
+									layer.alert('原因可能如下：<br/>1.没有足够的MCF激活手续费', {
+										title: '激活失败!',
+										closeBtn: 1,
+										btn: ['确定']
+									});
+									return false;
+								} else {
+									var reference = nacl.to_hex(Base58.decode(res.data.reference));
+									var fee = strAddZero(parseInt(FEE * 100000000).toString(16), 16);
+									var spk = nacl.to_hex(Base58.decode(publicKey));
+									var head = '0000001f';
+									var txGroupId = '00000000';
+									var groupId = '00000002';
+									var signStr = head + timestamp + txGroupId + reference + spk + groupId + fee;
+									signStr = Base58.encode(nacl.from_hex(signStr));
+
+									var trBytes = Base58.decode(signStr);
+									var kp1 = nacl.crypto_sign_seed_keypair(Base58.decode(privateKey));
+									var c = nacl.crypto_sign_detached(trBytes, kp1.signSk);
+									var buffer1 = new Uint8Array(trBytes);
+									var buffer2 = new Uint8Array(c);
+									var tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+									tmp.set(buffer1, 0);
+									tmp.set(buffer2, buffer1.byteLength);
+									axios.post(BASEURL + '/transactions/process', Base58.encode(tmp))
+										.then(function(res) {
+											if (res.data === true) {
+												alert('激活请求已提交');
+											} else {
+												alert(res.data.message)
+											}
+										})
+										.catch(function(error) {
+											console.log(error);
+											if (error.data.error) {
+												layer.alert('原因可能如下：<br/>1.没有足够的MCF激活手续费', {
+													title: '激活失败!',
+													closeBtn: 1,
+													btn: ['确定']
+												});
+											}
+										});
+								}
+							})
+							.catch(function(error) {
+								console.log(error);
+							});
+					});
+				}
+			}
+
+			//转账;
+			function tryTransfer() {
+				var creatorAccount = $('#transferAccountList option:selected').val();
+				var assetId = $('#transferAccountAssetsList option:selected').val();
+				var recipientAccount = $('#transferRecipientAccount').val();
+				var amount = $('#transferAmount').val();
+
+				if (!creatorAccount) {
+					alert("请选择地址");
+					return false;
+				}
+
+				var privateKey = getPrivateKey(creatorAccount, tryTransfer);
+				if (privateKey) {
+					nacl_factory.instantiate(function(nacl) {
+						var privateKeyHex = nacl.to_hex((Base58.decode(privateKey)));
+						var kp = nacl.crypto_sign_seed_keypair(nacl.from_hex(privateKeyHex));
+						var publicKey = Base58.encode(kp.signPk);
+						//时间戳
+						var timestamp = strAddZero(parseInt(new Date().getTime()).toString(16), 16);
+						/**根据地址获取reference**/
+						axios.get(BASEURL + '/addresses/' + creatorAccount)
+							.then(function(res) {
+								if (!res.data.reference) {
+									alert("账号未激活");
+									return false;
+								} else {
+									var reference = nacl.to_hex(Base58.decode(res.data.reference));
+									var fee = strAddZero(parseInt(FEE * 100000000).toString(16), 16);
+									var spk = nacl.to_hex(Base58.decode(publicKey));
+									var recipient = nacl.to_hex(Base58.decode(recipientAccount));
+
+									var txGroupId = '00000000';
+									if (assetId == 0) {
+										var head = '00000002';
+										amount = strAddZero(parseInt(amount * 100000000).toString(16), 16);
+										var signStr = head + timestamp + txGroupId + reference + spk + recipient + amount + fee;
+									} else {
+										var head = '0000000c';
+										assetId = strAddZero(parseInt(assetId).toString(16), 16);
+										amount = strAddZero(parseInt(amount * 100000000).toString(16), 24);
+										var signStr = head + timestamp + txGroupId + reference + spk + recipient + assetId + amount +
+											fee;
+									}
+									signStr = Base58.encode(nacl.from_hex(signStr));
+
+									var trBytes = Base58.decode(signStr);
+									var kp1 = nacl.crypto_sign_seed_keypair(Base58.decode(privateKey));
+									var c = nacl.crypto_sign_detached(trBytes, kp1.signSk);
+									var buffer1 = new Uint8Array(trBytes);
+									var buffer2 = new Uint8Array(c);
+									var tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+									tmp.set(buffer1, 0);
+									tmp.set(buffer2, buffer1.byteLength);
+									axios.post(BASEURL + '/transactions/process', Base58.encode(tmp))
+										.then(function(res) {
+											if (res.data === true) {
+												alert('转账已提交');
+											} else {
+												alert(res.data.message)
+											}
+										})
+										.catch(function(error) {
+											console.log(error);
+											if (error.data.error) {
+												layer.alert('原因可能如下：<br/>1.上一笔交易还未被区块确认<br/>2.当前转账资产种类余额不足<br/>3.没有足够的MCF转账手续费', {
+													title: '转账失败!',
+													closeBtn: 1,
+													btn: ['确定']
+												});
+											}
+										});
+								}
+							})
+							.catch(function(error) {
+								console.log(error);
+							});
+					});
+				}
+			}
+
+			//根据选中的账户加载资产列表
+			$("#transferAccountList").change(function() {
+				if (!this.value) return false;
+				axios.get(BASEURL + '/assets/balances?address=' + this.value + '&ordering=ASSET_BALANCE_ACCOUNT&limit=0')
+					.then(function(res) {
+						$("#transferAccountAssetsList").html('');
+						for (var i = 0, dataLen = res.data.length; i < dataLen; i++) {
+							if (res.data[i].balance > 0) {
+								$("#transferAccountAssetsList").append('<option value="' + res.data[i].assetId + '">' + res.data[i].assetName +
+									':' + res.data[i].balance + '</option>')
+							}
+						}
+					})
+					.catch(function(error) {
+						console.log(error);
+					});
+			})
+
+			//加载 代理挖矿 页面表格
+			function loadRecipientProxyTable() {
+				$("#recipientProxyTable").html('');
+				var accountInfo = getLocalStorage('accountInfo');
+
+				for (var i = 0; i < accountInfo.length; i++) {
+					! function(i) {
+						axios.get(BASEURL + '/addresses/' + accountInfo[i].account)
+							.then(function(res) {
+								if (res.data.flags == 0) {
+									axios.all([getProxyingProxiedFor(accountInfo[i].account), getBlocksForgers(accountInfo[i].account),
+											getAdminForgingAccounts()
+										])
+										.then(axios.spread(function(proxyingProxiedBy, blocksForgers, adminForgingAccounts) {
+
+											var proxyingProxiedData = proxyingProxiedBy.data;
+											var blocksForgersData = blocksForgers.data;
+											var adminForgingAccountsData = adminForgingAccounts.data;
+											for (var j = 0, proxyingProxiedDataLen = proxyingProxiedData.length; j < proxyingProxiedDataLen; j++) {
+												var blockCount = 0,
+													state = "已停止",
+													btn = '<button class="btn btn-xs btn-success" onclick="changeProxyState(\'' + proxyingProxiedData[j].recipient +
+													'\',\'' + proxyingProxiedData[j].forger + '\',\'on\')">开始挖矿</botton>';
+												for (var k = 0, blocksForgersDataLen = blocksForgersData.length; k < blocksForgersDataLen; k++) {
+													if (blocksForgersData[k].forgedBy == proxyingProxiedData[j].forger && blocksForgersData[k].forgedFor ==
+														proxyingProxiedData[j].recipient) {
+														blockCount = blocksForgersData[k].blockCount;
+													}
+												}
+												for (var l = 0, adminForgingAccountsDataLen = adminForgingAccountsData.length; l <
+													adminForgingAccountsDataLen; l++) {
+													if (adminForgingAccountsData[l].proxiedBy == proxyingProxiedData[j].forger &&
+														adminForgingAccountsData[l].proxiedFor == proxyingProxiedData[j].recipient) {
+														state = "挖矿中";
+														btn = '<button class="btn btn-xs btn-primary" onclick="changeProxyState(\'' + proxyingProxiedData[j].recipient +
+															'\',\'' + proxyingProxiedData[j].forger + '\',\'off\')">停止挖矿</botton>';
+													}
+												}
+												var htmlMintingProxyTable = '<tr><th scope="row">' + proxyingProxiedData[j].forger + '</th><td>' +
+													proxyingProxiedData[j].recipient + '</td><td>' + proxyingProxiedData[j].share + '%</td><td>' +
+													blockCount + '</td><td>' + state + '</td><td>' + btn + '</td></tr>';
+												$("#recipientProxyTable").append(htmlMintingProxyTable);
+											}
+										}))
+										.catch(function(error) {
+											console.log(error);
+											// alert(error.data.message);
+										});
+								}
+							})
+							.catch(function(error) {
+								console.log(error);
+							});
+					}(i)
+				}
+			}
+
+			//加载 挖矿 页面表格
+			function loadMintingProxyTable() {
+				$("#mintingProxyTable").html('');
+				var accountInfo = getLocalStorage('accountInfo');
+
+				for (var i = 0; i < accountInfo.length; i++) {
+					! function(i) {
+						axios.get(BASEURL + '/addresses/' + accountInfo[i].account)
+							.then(function(res) {
+								if (res.data.flags !== 0) {
+									axios.all([getProxyingProxiedBy(accountInfo[i].account), getBlocksForgers(accountInfo[i].account),
+											getAdminForgingAccounts()
+										])
+										.then(axios.spread(function(proxyingProxiedBy, blocksForgers, adminForgingAccounts) {
+
+											var proxyingProxiedData = proxyingProxiedBy.data;
+											var blocksForgersData = blocksForgers.data;
+											var adminForgingAccountsData = adminForgingAccounts.data;
+											for (var j = 0, proxyingProxiedDataLen = proxyingProxiedData.length; j < proxyingProxiedDataLen; j++) {
+												var blockCount = 0,
+													state = "已停止",
+													btn = '<button class="btn btn-xs btn-primary" onclick="editProxy(\'' + proxyingProxiedData[j].forger +
+													'\',\'' + proxyingProxiedData[j].recipient + '\',\'' + proxyingProxiedData[j].share +
+													'\')">修改</botton><button class="btn btn-xs btn-success" onclick="changeProxyState(\'' +
+													proxyingProxiedData[j].forger + '\',\'' + proxyingProxiedData[j].recipient +
+													'\',\'on\')">开始挖矿</botton>';
+												for (var k = 0, blocksForgersDataLen = blocksForgersData.length; k < blocksForgersDataLen; k++) {
+													if (blocksForgersData[k].forgedBy == proxyingProxiedData[j].forger && blocksForgersData[k].forgedFor ==
+														proxyingProxiedData[j].recipient) {
+														blockCount = blocksForgersData[k].blockCount;
+													}
+												}
+												for (var l = 0, adminForgingAccountsDataLen = adminForgingAccountsData.length; l <
+													adminForgingAccountsDataLen; l++) {
+													if (adminForgingAccountsData[l].proxiedBy == proxyingProxiedData[j].forger &&
+														adminForgingAccountsData[l].proxiedFor == proxyingProxiedData[j].recipient) {
+														state = "挖矿中";
+														btn = '<button class="btn btn-xs btn-primary" onclick="editProxy(\'' + proxyingProxiedData[j].forger +
+															'\',\'' + proxyingProxiedData[j].recipient + '\',\'' + proxyingProxiedData[j].share +
+															'\')">修改</botton><button class="btn btn-xs btn-primary" onclick="changeProxyState(\'' +
+															proxyingProxiedData[j].forger + '\',\'' + proxyingProxiedData[j].recipient +
+															'\',\'off\')">停止挖矿</botton>';
+													}
+												}
+												var htmlMintingProxyTable = '<tr><th scope="row">' + proxyingProxiedData[j].forger + '</th><td>' +
+													proxyingProxiedData[j].recipient + '</td><td>' + proxyingProxiedData[j].share + '%</td><td>' +
+													blockCount + '</td><td>' + state + '</td><td>' + btn + '</td></tr>';
+												$("#mintingProxyTable").append(htmlMintingProxyTable);
+											}
+										}))
+										.catch(function(error) {
+											console.log(error);
+											// alert(error.data.message);
+										});
+								}
+							})
+							.catch(function(error) {
+								console.log(error);
+							});
+					}(i)
+				}
+			}
+
+			//修改代理关系(将代理数据填充到表单)
+			function editProxy(m, r, s) {
+				// console.log('m:'+m);
+				// console.log('r:'+r);
+				// console.log('s:'+s);
+				$("#mintingAccountList").val(m);
+				$("#createProxyRecipientAccount").val(r);
+				$("#createProxyShare").val(s);
+			}
+
+			//改变挖矿状态
+			function changeProxyState(m, r, s) {
+				changeProxyStateM = m;
+				changeProxyStateR = r;
+				changeProxyStateS = s;
+				toChangeProxyState();
+
+			}
+
+			function toChangeProxyState() {
+				var privateKey = getPrivateKey(changeProxyStateM, toChangeProxyState);
+				if (privateKey) {
+					nacl_factory.instantiate(function(nacl) {
+						var mintingAccountPrk = privateKey;
+						var mintingAccount = changeProxyStateM;
+						var recipientAccount = changeProxyStateR;
+						axios.all([getAddressInfo(mintingAccount), getAddressInfo(recipientAccount)])
+							.then(axios.spread(function(mInfo, rInfo) {
+								if (!rInfo.data.publicKey || !mInfo.data.publicKey) {
+									alert("授权地址或被授权地址未激活");
+									return false;
+								}
+								var mintingAccountPrkB58 = Base58.decode(mintingAccountPrk);
+								var recipientAccountPukB85 = Base58.decode(rInfo.data.publicKey);
+								var mintingEd25519KeyPair = nacl.crypto_sign_seed_keypair(mintingAccountPrkB58);
+								var mintingX25519KeyPair = nacl.crypto_box_keypair_from_sign_sk(mintingEd25519KeyPair.signSk);
+								var mintingX25519Prk = mintingX25519KeyPair.boxSk;
+								// var mintingAccountPuk = mintingEd25519KeyPair.signPk;
+								recipientAccountX25519Puk = nacl.crypto_box_pk_from_sign_pk(recipientAccountPukB85)
+								var sharedSecret = nacl.crypto_scalarmult(mintingX25519Prk, recipientAccountX25519Puk);
+								var proxyPrivateKey = nacl.crypto_hash_sha256(sharedSecret);
+
+								switch (changeProxyStateS) {
+									case 'on':
+										axios.post(BASEURL + '/admin/forgingaccounts', Base58.encode(proxyPrivateKey))
+											.then(function(res) {
+												if (res.data === true) {
+													alert('添加成功');
+												}
+											})
+											.catch(function(error) {
+												console.log(error);
+											});
+										break;
+									case 'off':
+										axios.delete(BASEURL + '/admin/forgingaccounts', {
+												data: Base58.encode(proxyPrivateKey)
+											})
+											.then(function(res) {
+												if (res.data === true) {
+													alert('移除成功');
+												}
+											})
+											.catch(function(error) {
+												console.log(error);
+											});
+										break;
+									default:
+										break;
+								}
+								loadMintingProxyTable();
+								loadRecipientProxyTable();
+							}))
+							.catch(function(error) {
+								console.log(error);
+								alert(error.data.message);
+							});
+
+					});
+				}
+			}
+
+			//加载 挖矿 页面下拉菜单选项
+			function loadMintingAccountsList() {
+				$("#mintingAccountList").html('');
+				var accountInfo = getLocalStorage('accountInfo');
+
+				for (var i = 0; i < accountInfo.length; i++) {
+					! function(i) {
+						axios.get(BASEURL + '/addresses/' + accountInfo[i].account)
+							.then(function(res) {
+								if (res.data.flags !== 0) {
+									var mintingAccountListOption = '<option value="' + res.data.address + '">' + res.data.address +
+										'</option>';
+									$("#mintingAccountList").append(mintingAccountListOption);
+								}
+							})
+							.catch(function(error) {
+								console.log(error);
+							});
+					}(i)
+				}
+			}
+
+			//加载账号列表
+			function loadAccountsList() {
+				document.getElementById("page4AccountList").innerHTML = '';
+				document.getElementById("transferAccountList").innerHTML = '';
+				var accountInfo = getLocalStorage('accountInfo');
+				var transferAccountListOption = '<option value="">选择转出地址</option>';
+				for (var i = 0; i < accountInfo.length; i++) {
+					transferAccountListOption += '<option value="' + accountInfo[i].account + '">' + accountInfo[i].account +
+						'</option>';
+					! function(i) {
+						axios.get(BASEURL + '/addresses/' + accountInfo[i].account)
+							.then(function(res) {
+								if (cachedPrivateKeys[accountInfo[i].account] != undefined) {
+									var strState = "Unlocked";
+								} else {
+									var strState = "Locked";
+								}
+								if (res.data.defaultGroupId === 2) {
+									var strBtn = '<button class="btn btn-default btn-sm" disabled="disabled">已激活</button>';
+								} else {
+									var strBtn = '<button class="btn btn-success btn-sm" onclick="activateAcount(\'' + accountInfo[i].account +
+										'\')">未激活</button>';
+								}
+								var strHtml = document.createElement("tr");
+								strHtml.innerHTML = '<th scope="row">' + accountInfo[i].account +
+									'</th><td>' + strState + '</td><td><button class="btn btn-sm" onclick="delAccount(\'' + accountInfo[i].account +
+									'\')">移除账户</button></td><td>' + strBtn +
+									'</td>';
+								document.getElementById("page4AccountList").appendChild(strHtml)
+							})
+							.catch(function(error) {
+								console.log(error);
+							});
+					}(i)
+				}
+				document.getElementById("transferAccountList").innerHTML = transferAccountListOption;
+			}
+
+
+
+			//移除账户
+			function delAccount(account) {
+				var accountInfo = getLocalStorage('accountInfo');
+				if (!accountInfo) {
+					accountInfo = [];
+				} else {
+					for (var i = 0, accountInfoLen = accountInfo.length; i < accountInfoLen; i++) {
+						if (accountInfo[i] && accountInfo[i].account == account) {
+							accountInfo.splice(i, 1);
+						}
+					}
+				}
+				setLocalStorage("accountInfo", JSON.stringify(accountInfo));
+
+				reloadData();
+			}
+
+			//添加账户
+			function addAccount() {
+				var mnemonicPhrase = trimStr(document.getElementById("mnemonicPhrase").value);
+				var addAccountPwd1 = trimStr(document.getElementById("addAccountPwd1").value);
+				var addAccountPwd2 = trimStr(document.getElementById("addAccountPwd2").value);
+				var pwd = $('#pwd1').val();
+				var regex = new RegExp(
+					'^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\W_!@#$%^&*`~()-+=]+$)(?![a-z0-9]+$)(?![a-z\W_!@#$%^&*`~()-+=]+$)(?![0-9\W_!@#$%^&*`~()-+=]+$)[a-zA-Z0-9\W_!@#$%^&*`~()-+=]{8,24}$'
+				);
+				if (mnemonicPhrase == "" || addAccountPwd1 == "") {
+					alert("助记词密码不能为空！")
+					return null;
+				}
+				if (!regex.test(addAccountPwd1)) {
+					alert("密码不符合规则，请重新输入。");
+					document.getElementById("addAccountPwd1").focus();
+					return;
+				}
+				if (addAccountPwd1 !== addAccountPwd2) {
+					alert("两次密码不相同，请重新输入。");
+					document.getElementById("addAccountPwd1").focus();
+					return;
+				}
+				var mnemo = new Mnemonic("english");
+				var entropy = mnemo.revertEntropy(mnemonicPhrase);
+				if (!entropy) {
+					alert("助记词错误！");
+					document.getElementById("mnemonicPhrase").focus();
+					return;
+				}
+				savePrivateKey(entropy, addAccountPwd1);
+			}
+
+			function getPrivateKey(account, func, params) {
+				var accountInfo = getLocalStorage('accountInfo');
+				if (!accountInfo) {
+					alert("未添加过账户");
+					return false;
+				}
+
+				if (cachedPrivateKeys[account] != undefined)
+					return cachedPrivateKeys[account];
+
+				layer.prompt({
+					formType: 1,
+					placeholder: '请输入密码',
+					title: '请输入密码',
+				}, function(pwd, index, elem) {
+					var naclPromise = nacl_factory.instantiate(function(nacl) {
+						for (var i = 0, accountInfoLen = accountInfo.length; i < accountInfoLen; i++) {
+							if (accountInfo[i].account == account) {
+								var salt = nacl.from_hex(accountInfo[i].salt);
+								var encryptedPrivateKey = nacl.from_hex(accountInfo[i].encryptedPrivateKey);
+								var passwordArray = nacl.encode_utf8(pwd);
+								var decryptionKey = deriveStorageKey(nacl, salt, passwordArray);
+								var decryptedPrivateKey = nacl.crypto_secretbox_open(encryptedPrivateKey, salt, decryptionKey);
+								cachedPrivateKeys[account] = nacl.decode_utf8(decryptedPrivateKey);
+							}
+						}
+
+					}).then(function() {
+						func(params);
+						loadAccountsList();
+						layer.close(index);
+					}).catch(function(reason) {
+						if (reason.message == "nacl_raw._crypto_secretbox_open signalled an error") {
+							alert("密码错误");
+						}
+						layer.close(index);
+					});
+
+					return naclPromise;
+				});
+			}
+
+			function savePrivateKey(entropy, pwd) {
+				var naclPromise = nacl_factory.instantiate(function(nacl) {
+					var privateKeyHex = nacl.to_hex(nacl.crypto_hash_sha256(nacl.from_hex(entropy)));
+					var privateKey = Base58.encode(nacl.from_hex(privateKeyHex));
+					var kp = nacl.crypto_sign_seed_keypair(nacl.from_hex(privateKeyHex));
+					var publicKey = Base58.encode(kp.signPk);
+					var account = getAccountAddressFromPublicKey(publicKey);
+					var salt = nacl.crypto_secretbox_random_nonce();
+					var passwordArray = nacl.encode_utf8(pwd);
+					var encryptionKey = deriveStorageKey(nacl, salt, passwordArray);
+					var privateKeyArray = nacl.encode_utf8(privateKey);
+					var encryptedPrivateKey = nacl.crypto_secretbox(privateKeyArray, salt, encryptionKey);
+
+					var accountInfo = getLocalStorage('accountInfo');
+					if (!accountInfo) {
+						accountInfo = [];
+					} else {
+						for (var i = 0, accountInfoLen = accountInfo.length; i < accountInfoLen; i++) {
+							// console.log(accountInfo)
+							if (accountInfo[i] && accountInfo[i].account == account) {
+								accountInfo.splice(i, 1);
+							}
+						}
+					}
+
+					var cachedData = {
+						"account": account,
+						"salt": nacl.to_hex(salt),
+						"encryptedPrivateKey": nacl.to_hex(encryptedPrivateKey)
+					}
+
+					accountInfo.push(cachedData);
+					setLocalStorage("accountInfo", JSON.stringify(accountInfo));
+
+
+					reloadData();
+
+				});
+				return naclPromise;
+			}
+
+			function deriveStorageKey(nacl, salt, passwordArray) {
+				var toBeHashed = concatUint8Arrays(salt, passwordArray);
+				var hash = nacl.crypto_hash_sha256(toBeHashed);
+
+				toBeHashed = new Uint8Array(passwordArray.length + hash.length);
+				toBeHashed.set(passwordArray, 0);
+
+				for (var rounds = 0; rounds < 10000; ++rounds) {
+
+					toBeHashed.set(hash, passwordArray.length);
+					hash = nacl.crypto_hash_sha256(toBeHashed);
+				}
+
+				return hash;
+			}
+
+			function concatUint8Arrays(array1, array2) {
+				var bigArray = new Uint8Array(array1.length + array2.length);
+				bigArray.set(array1, 0);
+				bigArray.set(array2, array1.length);
+				return bigArray;
+			}
+
+
+
+
+
+			//加载节点信息列表
+			function loadPeers() {
+				axios.all([getPeers(), getPeersKnown()])
+					.then(axios.spread(function(peers, peersKnown) {
+						var peers = peers.data;
+						var peersKnown = peersKnown.data;
+						var strHtml1 = "",
+							strHtml2 = "";
+						for (var i = 0, peersLen = peers.length; i < peersLen; i++) {
+							strHtml1 += '<tr><th scope="row">' + peers[i].address + '</th><td>' + peers[i].lastPing +
+								'</td><td>已连接</td><td><button type="button" class="btn btn-danger btn-xs" onClick="changeNodeState(\'del\',\'' +
+								peers[i].address + '\')">删除节点</button></td></tr>';
+						}
+						// for (var j = 0, peersKnownLen = peersKnown.length; j < peersKnownLen; j++) {
+						// 	if (JSON.stringify(peers).indexOf(peersKnown[j].address) == -1) {
+						// 		strHtml += '<tr><th scope="row">' + peersKnown[j].address +
+						// 			'</th><td>--</td><td>未连接</td><td><button type="button" class="btn btn-success btn-xs" onClick="changeNodeState(\'add\',\'' +
+						// 			peersKnown[j].address + '\')">添加节点</button></td></tr>';
+						// 	}
+						// }
+						document.getElementById("listPeers").innerHTML = strHtml1;
+
+
+						for (var j = 0, peersKnownLen = peersKnown.length; j < peersKnownLen; j++) {
+							strHtml2 += '<tr><th scope="row">' + peersKnown[j].address +
+								'</th><td><button type="button" class="btn btn-success btn-xs" onClick="changeNodeState(\'add\',\'' +
+								peersKnown[j].address + '\')">添加节点</button></td></tr>';
+						}
+
+						document.getElementById("listPeersKnown").innerHTML = strHtml2;
+					}))
+					.catch(function(error) {
+						console.log(error);
+						alert(error.data.message);
+					});
+			}
+
+			//改变节点状态
+			function changeNodeState(type, node) {
+				if (!node) {
+					node = trimStr(document.getElementById("nodeAddress").value);
+					if (!node) {
+						alert("请输入节点");
+						return false;
+					}
+				}
+
+				switch (type) {
+					case 'add':
+						axios.post(BASEURL + '/peers', node)
+							.then(function(res) {
+								// console.log(res.data);
+								if (res.data === true) {
+									alert('添加成功');
+								}
+							})
+							.catch(function(error) {
+								console.log(error);
+								alert(error.data.message);
+							});
+						break;
+					case 'del':
+						axios.delete(BASEURL + '/peers', {
+								data: node
+							})
+							.then(function(res) {
+								if (res.data === true) {
+									alert('移除成功');
+								} else {
+									alert('该节点已移除')
+								}
+							})
+							.catch(function(error) {
+								console.log(error);
+								alert(error.data.message);
+							});
+						break;
+					default:
+						console.log("default");
+						break;
+				}
+			}
+
+			//移除所有节点
+			function removeAllPeers() {
+				axios.delete(BASEURL + '/peers/known', {
+						data: 'aa'
+					})
+					.then(function(res) {
+						if (res.data == true) {
+							alert('全部移除成功')
+						} else {
+							alert('无可移除节点')
+						}
+					})
+					.catch(function(error) {
+						console.log(error);
+						alert(error.data.message);
+					});
+			}
+
+			//获取区块同步进度
+			function getBlockProgress() {
+				axios.all([getPeers(), getBlocksHeight()])
+					.then(axios.spread(function(peers, blocksHeight) {
+						var peers = peers.data;
+						var blocksHeight = blocksHeight.data;
+						var blocksHighest = 0;
+						for (var i = 0, peersLen = peers.length; i < peersLen; i++) {
+							if (peers[i].lastHeight > blocksHighest) {
+								blocksHighest = peers[i].lastHeight;
+							}
+						}
+
+						var progress = parseInt((blocksHeight / blocksHighest) * 10000) / 100;
+
+						$("#blocksProgress").width(progress + "%").html(progress + "%");
+					}))
+					.catch(function(error) {
+						console.log(error);
+						alert(error.data.message);
+					});
+			}
+		</script>
+	</body>
+</html>

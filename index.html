@@ -49,6 +49,7 @@
 													<th>node</th>
 													<th>ping</th>
 													<th>state</th>
+													<th>version</th>
 													<th>operation</th>
 												</tr>
 											</thead>
@@ -98,6 +99,9 @@
 										</div>
 									</div>
 								</div>
+							</div>
+							<div class="form-horizontal col-sm-12">
+								<label class="col-sm-2 control-label" style="text-align: center;padding-top:0px;">node UI Version:V2.0</label>
 							</div>
 						</div>
 					</div>
@@ -1265,7 +1269,7 @@
 							strHtml2 = "";
 						for (var i = 0, peersLen = peers.length; i < peersLen; i++) {
 							strHtml1 += '<tr><th scope="row">' + peers[i].address + '</th><td>' + peers[i].lastPing +
-								'</td><td>已连接</td><td><button type="button" class="btn btn-danger btn-xs" onClick="changeNodeState(\'del\',\'' +
+								'</td><td>已连接</td><td>' + peers[i].version + '</td><td><button type="button" class="btn btn-danger btn-xs" onClick="changeNodeState(\'del\',\'' +
 								peers[i].address + '\')">删除节点</button></td></tr>';
 						}
 						// for (var j = 0, peersKnownLen = peersKnown.length; j < peersKnownLen; j++) {

@@ -23,3 +23,7 @@ body{
 #mintingProxyTable button{
 	margin-left: 10px;
 }
+
+#page4AccountList button{
+	width: 100px;
+}

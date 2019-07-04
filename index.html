@@ -12,13 +12,36 @@
 	</head>
 	<body>
 		<div>
+			<div class="form-horizontal">
+				<div class="form-group">
+					<label class="col-sm-1 col-sm-offset-9 control-label">
+						<div class="lang-tag language">节点</div>
+					</label>
+					<div class="col-sm-2">
+						<select class="form-control" id="langFlag">
+							<option value="cn">中文</option>
+							<option value="en">ENGLISH</option>
+						</select>
+					</div>
+				</div>
+			</div>
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs nav-justified" role="tablist">
-				<li role="presentation" class="active"><a href="#peer" aria-controls="peer" role="tab" data-toggle="tab">节点</a></li>
-				<li role="presentation"><a href="#minting" aria-controls="minting" role="tab" data-toggle="tab">挖矿</a></li>
-				<li role="presentation"><a href="#proxy" aria-controls="proxy" role="tab" data-toggle="tab">代理挖矿专用</a></li>
-				<li role="presentation"><a href="#account" aria-controls="account" role="tab" data-toggle="tab">账户</a></li>
-				<li role="presentation"><a href="#enable" aria-controls="enable" role="tab" data-toggle="tab">授权子账户</a></li>
+				<li role="presentation" class="active"><a href="#peer" aria-controls="peer" role="tab" data-toggle="tab">
+						<div class="lang-tag peers">节点</div>
+					</a></li>
+				<li role="presentation"><a href="#minting" aria-controls="minting" role="tab" data-toggle="tab">
+						<div class="lang-tag minting">挖矿</div>
+					</a></li>
+				<li role="presentation"><a href="#proxy" aria-controls="proxy" role="tab" data-toggle="tab">
+						<div class="lang-tag pmo">代理挖矿专用</div>
+					</a></li>
+				<li role="presentation"><a href="#account" aria-controls="account" role="tab" data-toggle="tab">
+						<div class="lang-tag address">账户</div>
+					</a></li>
+				<li role="presentation"><a href="#enable" aria-controls="enable" role="tab" data-toggle="tab">
+						<div class="lang-tag enableForging">授权子账户</div>
+					</a></li>
 			</ul>
 
 			<!-- Tab panes -->
@@ -28,14 +51,21 @@
 				<div role="tabpanel" class="tab-pane active" id="peer">
 					<div class="panel panel-default">
 						<!-- Default panel contents -->
-						<div class="panel-heading clearfix">节点列表
-							<button type="button" class="btn btn-info btn-sm" onclick="loadPeers()" style="float: right;">刷新列表</button>
+						<div class="panel-heading clearfix">
+							<span class="lang-tag peerList">节点列表</span>
+							<button type="button" class="btn btn-info btn-sm" onclick="loadPeers()" style="float: right;">
+								<div class="lang-tag refresh">刷新列表</div>
+							</button>
 						</div>
 						<div class="panel-body">
 							<!-- Nav tabs -->
 							<ul class="nav nav-tabs" role="tablist">
-								<li role="presentation" class="active"><a href="#page1" aria-controls="page1" role="tab" data-toggle="tab">已连接列表</a></li>
-								<li role="presentation"><a href="#page2" aria-controls="page2" role="tab" data-toggle="tab">可连接列表</a></li>
+								<li role="presentation" class="active"><a href="#page1" aria-controls="page1" role="tab" data-toggle="tab">
+										<div class="lang-tag connectedPeers">已连接列表</div>
+									</a></li>
+								<li role="presentation"><a href="#page2" aria-controls="page2" role="tab" data-toggle="tab">
+										<div class="lang-tag knownPeers">可连接列表</div>
+									</a></li>
 							</ul>
 
 							<!-- Tab panes -->
@@ -46,11 +76,21 @@
 										<table class="table">
 											<thead>
 												<tr>
-													<th>node</th>
-													<th>ping</th>
-													<th>state</th>
-													<th>version</th>
-													<th>operation</th>
+													<th>
+														<div class="lang-tag node">节点</div>
+													</th>
+													<th>
+														<div class="lang-tag ping">延迟</div>
+													</th>
+													<th>
+														<div class="lang-tag state">状态</div>
+													</th>
+													<th>
+														<div class="lang-tag version">版本</div>
+													</th>
+													<th>
+														<div class="lang-tag operation">操作</div>
+													</th>
 												</tr>
 											</thead>
 											<tbody id="listPeers">
@@ -65,10 +105,12 @@
 										<table class="table">
 											<thead>
 												<tr>
-													<th>node</th>
-													<!-- <th>ping</th>
-													<th>state</th> -->
-													<th>operation</th>
+													<th>
+														<div class="lang-tag node">节点</div>
+													</th>
+													<th>
+														<div class="lang-tag operation">操作</div>
+													</th>
 												</tr>
 											</thead>
 											<tbody id="listPeersKnown">
@@ -82,16 +124,24 @@
 
 						<div class="panel-footer clearfix" style="text-align: right;">
 							<div class="form-group">
-								<input type="text" class="form-control" id="nodeAddress" placeholder="node address" style="width: 80%;float: left;"
+								<input type="text" class="form-control" id="nodeAddress" placeholder="node address" style="width: 70%;float: left;"
 								 value="" autocomplete="off">
-								<button class="btn" onclick="changeNodeState('add')">手动添加节点</button>
-								<button class="btn" onclick="changeNodeState('del')">手动移除节点</button>
+								<button class="btn" onclick="changeNodeState('add')">
+									<div class="lang-tag ManuallyAdd">手动添加节点</div>
+								</button>
+								<button class="btn" onclick="changeNodeState('del')">
+									<div class="lang-tag ManuallyRemove">手动移除节点</div>
+								</button>
 							</div>
 							<div class="form-group">
-								<button type="button" class="btn btn-danger" onclick="removeAllPeers()">清除全部可连接节点</button>
+								<button type="button" class="btn btn-danger" onclick="removeAllPeers()">
+									<div class="lang-tag ClearAllPeers">清除全部可连接节点</div>
+								</button>
 							</div>
 							<div class="form-horizontal">
-								<label class="col-sm-2 control-label" style="text-align: center;padding-top:0px;">区块同步状态</label>
+								<label class="col-sm-2 control-label" style="text-align: center;padding-top:0px;">
+									<div class="lang-tag SynchroStatus">区块同步状态</div>
+								</label>
 								<div class="col-sm-6">
 									<div class="progress" style="background-color: #d2d2d2;">
 										<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0"
@@ -101,7 +151,8 @@
 								</div>
 							</div>
 							<div class="form-horizontal col-sm-12">
-								<label class="col-sm-2 control-label" style="text-align: center;padding-top:0px;">node UI Version:V2.0</label>
+								<label class="col-sm-2 control-label" style="text-align: center;padding-top:0px;">
+									<span class="lang-tag NodeVersion">区块同步状态</span>:V3.0</label>
 							</div>
 						</div>
 					</div>
@@ -112,12 +163,16 @@
 				<div role="tabpanel" class="tab-pane" id="minting">
 					<!-- 挖矿 绑定账号 -->
 					<div class="panel panel-default">
-						<div class="panel-heading">绑定账号</div>
+						<div class="panel-heading">
+							<div class="lang-tag AuthorizeProxyMinting">绑定账号</div>
+						</div>
 						<div class="panel-body">
 							<div class="form-horizontal">
 								<div id="infoBody">
 									<div class="form-group">
-										<label for="mintingAccountList" class="col-sm-2 control-label">授权地址</label>
+										<label for="mintingAccountList" class="col-sm-2 control-label">
+											<div class="lang-tag MinterAddress">授权地址</div>
+										</label>
 										<div class="col-sm-10">
 											<select class="form-control" id="mintingAccountList">
 
@@ -125,13 +180,17 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="createProxyRecipientAccount" class="col-sm-2 control-label">被授权地址</label>
+										<label for="createProxyRecipientAccount" class="col-sm-2 control-label">
+											<div class="lang-tag ProxyMintingAddress">被授权地址</div>
+										</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" id="createProxyRecipientAccount" value="">
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="createProxyShare" class="col-sm-2 control-label">授权比例</label>
+										<label for="createProxyShare" class="col-sm-2 control-label">
+											<div class="lang-tag Ratio">授权比例</div>
+										</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" id="createProxyShare" value="">
 										</div>
@@ -141,7 +200,9 @@
 									<div class="form-group">
 										<label for="words" class="col-sm-2 control-label"></label>
 										<div class="col-sm-10">
-											<button type="button" class="btn btn-success" onclick="createProxy()">提交</button>
+											<button type="button" class="btn btn-success" onclick="createProxy()">
+												<div class="lang-tag Submit">提交</div>
+											</button>
 										</div>
 									</div>
 								</div>
@@ -152,8 +213,11 @@
 
 					<!-- 挖矿 账户关系列表 -->
 					<div class="panel panel-default">
-						<div class="panel-heading clearfix">账户关系
-							<button type="button" class="btn btn-info btn-sm" onclick="loadMintingProxyTable()" style="float: right;">刷新列表</button>
+						<div class="panel-heading clearfix">
+							<span class="lang-tag ProxyRelationship">账户关系</span>
+							<button type="button" class="btn btn-info btn-sm" onclick="loadMintingProxyTable()" style="float: right;">
+								<div class="lang-tag refresh">刷新列表</div>
+							</button>
 						</div>
 						<div class="panel-body">
 							<div style="height: 300px;overflow-x: hidden; overflow-y: scroll;">
@@ -161,12 +225,24 @@
 								<table class="table">
 									<thead>
 										<tr>
-											<th>授权地址</th>
-											<th>被授权地址</th>
-											<th>比例</th>
-											<th>出块数量</th>
-											<th>状态</th>
-											<th>操作</th>
+											<th>
+												<div class="lang-tag MinterAddress">授权地址</div>
+											</th>
+											<th>
+												<div class="lang-tag ProxyMintingAddress">被授权地址</div>
+											</th>
+											<th>
+												<div class="lang-tag Ratio">比例</div>
+											</th>
+											<th>
+												<div class="lang-tag NumOfBlocks">出块数量</div>
+											</th>
+											<th>
+												<div class="lang-tag state">状态</div>
+											</th>
+											<th>
+												<div class="lang-tag operation">操作</div>
+											</th>
 										</tr>
 									</thead>
 									<tbody id="mintingProxyTable">
@@ -185,8 +261,10 @@
 				<div role="tabpanel" class="tab-pane" id="proxy">
 					<!-- 代理挖矿 账户关系列表 -->
 					<div class="panel panel-default">
-						<div class="panel-heading clearfix">账户关系
-							<button type="button" class="btn btn-info btn-sm" onclick="loadRecipientProxyTable()" style="float: right;">刷新列表</button>
+						<div class="panel-heading clearfix"><span class="lang-tag ProxyRelationship">账户关系</span>
+							<button type="button" class="btn btn-info btn-sm" onclick="loadRecipientProxyTable()" style="float: right;">
+								<div class="lang-tag refresh">刷新列表</div>
+							</button>
 						</div>
 						<div class="panel-body">
 							<div style="height: 500px;overflow-x: hidden; overflow-y: scroll;">
@@ -194,12 +272,24 @@
 								<table class="table">
 									<thead>
 										<tr>
-											<th>授权地址</th>
-											<th>被授权地址</th>
-											<th>比例</th>
-											<th>出块数量</th>
-											<th>状态</th>
-											<th>操作</th>
+											<th>
+												<div class="lang-tag MinterAddress">授权地址</div>
+											</th>
+											<th>
+												<div class="lang-tag ProxyMintingAddress">被授权地址</div>
+											</th>
+											<th>
+												<div class="lang-tag Ratio">比例</div>
+											</th>
+											<th>
+												<div class="lang-tag NumOfBlocks">出块数量</div>
+											</th>
+											<th>
+												<div class="lang-tag state">状态</div>
+											</th>
+											<th>
+												<div class="lang-tag operation">操作</div>
+											</th>
 										</tr>
 									</thead>
 									<tbody id="recipientProxyTable">
@@ -217,31 +307,45 @@
 				<div role="tabpanel" class="tab-pane" id="account">
 					<!-- 账户 创建账户 -->
 					<div class="panel panel-default">
-						<div class="panel-heading">创建账户</div>
+						<div class="panel-heading">
+							<div class="lang-tag CreateNewAddress">创建账户</div>
+						</div>
 						<div class="panel-body">
 							<div class="form-horizontal">
 								<div id="infoBody">
 									<div class="form-group">
 										<label for="" class="col-sm-2 control-label">
-											
+
 										</label>
 										<div class="col-sm-10">
-											<button type="button" class="btn btn-success" onclick="createAccount()">创建账户</button>
-											<button type="button" class="btn btn-success" onclick="clearCreate()">清空</button>
+											<button type="button" class="btn btn-success" onclick="createAccount()">
+												<div class="lang-tag Create">创建账户</div>
+											</button>
+											<button type="button" class="btn btn-success" onclick="clearCreate()">
+												<div class="lang-tag Clear">清空</div>
+											</button>
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="createdAccountW" class="col-sm-2 control-label">生成的助记词为</label>
+										<label for="createdAccountW" class="col-sm-2 control-label">
+											<div class="lang-tag Mnemonic">生成的助记词为</div>
+										</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" id="createdAccountW" value="" autocomplete="off" readonly="readonly">
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="createdAccountA" class="col-sm-2 control-label">生成的钱包地址为</label>
+										<label for="createdAccountA" class="col-sm-2 control-label">
+											<div class="lang-tag Address2">生成的钱包地址为</div>
+										</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" id="createdAccountA" value="" autocomplete="off" readonly="readonly">
-											<p>请把这些单词按顺序(区分大小写) 记录在纸上保存好 需要此助记词才能访问你自己的账户</p>
-											<p style="color: red;">注意永远不要泄露你的助记词,<br>如果你失去了它,你就无法进入你的账户</p>
+											<p>
+												<div class="lang-tag Text1"></div>
+											</p>
+											<p style="color: red;">
+												<span class="lang-tag Text2"></span>
+											</p>
 										</div>
 									</div>
 								</div>
@@ -252,25 +356,33 @@
 
 					<!-- 账户 添加账户 -->
 					<div class="panel panel-default">
-						<div class="panel-heading">添加账户</div>
+						<div class="panel-heading">
+							<div class="lang-tag AddYourAddress">添加账户</div>
+						</div>
 						<div class="panel-body">
 							<div class="form-horizontal">
 								<div id="infoBody">
 									<div class="form-group">
-										<label for="mnemonicPhrase" class="col-sm-2 control-label">助记词</label>
+										<label for="mnemonicPhrase" class="col-sm-2 control-label">
+											<div class="lang-tag InputMnemonic">助记词</div>
+										</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" id="mnemonicPhrase" value="" autocomplete="off">
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="addAccountPwd1" class="col-sm-2 control-label">请输入密码</label>
+										<label for="addAccountPwd1" class="col-sm-2 control-label">
+											<div class="lang-tag SetPassword">请输入密码</div>
+										</label>
 										<div class="col-sm-10">
 											<input type="password" class="form-control" id="addAccountPwd1" value="">
-											<span style="color: red;">密码长度为8-24，至少包含数字，大写英文，小写英文和特殊符号中的三种</span>
+											<span style="color: red;"><span class="lang-tag Text3"></span></span>
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="addAccountPwd2" class="col-sm-2 control-label">再次确认密码</label>
+										<label for="addAccountPwd2" class="col-sm-2 control-label">
+											<div class="lang-tag ConfirmPassword">再次确认密码</div>
+										</label>
 										<div class="col-sm-10">
 											<input type="password" class="form-control" id="addAccountPwd2" value="">
 										</div>
@@ -280,7 +392,9 @@
 									<div class="form-group">
 										<label for="words" class="col-sm-2 control-label"></label>
 										<div class="col-sm-10">
-											<button type="button" class="btn btn-success" onclick="addAccount()">添加账户</button>
+											<button type="button" class="btn btn-success" onclick="addAccount()">
+												<div class="lang-tag AddSub">添加账户</div>
+											</button>
 										</div>
 									</div>
 								</div>
@@ -291,8 +405,11 @@
 
 					<!-- 账户 账户列表 -->
 					<div class="panel panel-default">
-						<div class="panel-heading clearfix">账户列表
-							<button type="button" class="btn btn-info btn-sm" onclick="loadAccountsList()" style="float: right;">刷新列表</button>
+						<div class="panel-heading clearfix">
+							<span class="lang-tag AddressList">账户列表</span>
+							<button type="button" class="btn btn-info btn-sm" onclick="loadAccountsList()" style="float: right;">
+								<div class="lang-tag refresh">刷新列表</div>
+							</button>
 						</div>
 						<div class="panel-body">
 							<div style="height: 300px;overflow-x: hidden; overflow-y: scroll;">
@@ -300,10 +417,18 @@
 								<table class="table">
 									<thead>
 										<tr>
-											<th>地址</th>
-											<th>状态</th>
-											<th>操作</th>
-											<th>激活状态</th>
+											<th>
+												<div class="lang-tag Address3"></div>
+											</th>
+											<th>
+												<div class="lang-tag state">状态</div>
+											</th>
+											<th>
+												<div class="lang-tag operation">操作</div>
+											</th>
+											<th>
+												<div class="lang-tag ActivationStatus">激活状态</div>
+											</th>
 										</tr>
 									</thead>
 									<tbody id="page4AccountList">
@@ -317,12 +442,16 @@
 
 					<!-- 账户 转账 -->
 					<div class="panel panel-default">
-						<div class="panel-heading">转账</div>
+						<div class="panel-heading">
+							<div class="lang-tag PaymentTransfer">转账</div>
+						</div>
 						<div class="panel-body">
 							<div class="form-horizontal">
 								<div id="infoBody">
 									<div class="form-group">
-										<label for="mnemonicPhrase" class="col-sm-2 control-label">转出地址</label>
+										<label for="mnemonicPhrase" class="col-sm-2 control-label">
+											<div class="lang-tag SenderAddress">转出地址</div>
+										</label>
 										<div class="col-sm-10">
 											<select class="form-control" id="transferAccountList">
 
@@ -330,7 +459,9 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="mnemonicPhrase" class="col-sm-2 control-label">转账种类</label>
+										<label for="mnemonicPhrase" class="col-sm-2 control-label">
+											<div class="lang-tag ChooseAddress">转账种类</div>
+										</label>
 										<div class="col-sm-10">
 											<select class="form-control" id="transferAccountAssetsList">
 												<!-- <option value="0"></option> -->
@@ -338,19 +469,25 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="transferRecipientAccount" class="col-sm-2 control-label">收款地址</label>
+										<label for="transferRecipientAccount" class="col-sm-2 control-label">
+											<div class="lang-tag RecipientAddress">收款地址</div>
+										</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" id="transferRecipientAccount" value="">
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="transferRecipientAccount" class="col-sm-2 control-label">转账金额</label>
+										<label for="transferRecipientAccount" class="col-sm-2 control-label">
+											<div class="lang-tag Amount">转账金额</div>
+										</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" id="transferAmount" value="">
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="transferRecipientAccount" class="col-sm-2 control-label">转账手续费</label>
+										<label for="transferRecipientAccount" class="col-sm-2 control-label">
+											<div class="lang-tag Fee">转账手续费</div>
+										</label>
 										<div class="col-sm-10">
 											<span class="form-control">0.00001MCF</span>
 										</div>
@@ -358,7 +495,9 @@
 									<div class="form-group">
 										<label for="words" class="col-sm-2 control-label"></label>
 										<div class="col-sm-10">
-											<button type="button" class="btn btn-success" onclick="tryTransfer()">确定</button>
+											<button type="button" class="btn btn-success" onclick="tryTransfer()">
+												<div class="lang-tag Send">确定</div>
+											</button>
 										</div>
 									</div>
 								</div>
@@ -373,8 +512,10 @@
 				<div role="tabpanel" class="tab-pane" id="enable">
 					<!-- 授权子账户 账户列表 -->
 					<div class="panel panel-default">
-						<div class="panel-heading clearfix">账户列表
-							<button type="button" class="btn btn-info btn-sm" onclick="" style="float: right;">刷新列表</button>
+						<div class="panel-heading clearfix"><span class="lang-tag AddressList">账户列表</span>
+							<button type="button" class="btn btn-info btn-sm" onclick="" style="float: right;">
+								<div class="lang-tag refresh">刷新列表</div>
+							</button>
 						</div>
 						<div class="panel-body">
 							<div style="height: 600px;overflow-x: hidden; overflow-y: scroll;">
@@ -382,12 +523,24 @@
 								<table class="table">
 									<thead>
 										<tr>
-											<th>授权地址</th>
-											<th>出块数量</th>
-											<th>级别</th>
-											<th>状态</th>
-											<th>被授权地址</th>
-											<th>操作</th>
+											<th>
+												<div class="lang-tag MinterAddress">授权地址</div>
+											</th>
+											<th>
+												<div class="lang-tag NumOfBlocks">出块数量</div>
+											</th>
+											<th>
+												<div class="lang-tag Level">级别</div>
+											</th>
+											<th>
+												<div class="lang-tag state">状态</div>
+											</th>
+											<th>
+												<div class="lang-tag ProxyMintingAddress">被授权地址</div>
+											</th>
+											<th>
+												<div class="lang-tag operation">操作</div>
+											</th>
 										</tr>
 									</thead>
 									<tbody id="page5AccountList">
@@ -403,7 +556,7 @@
 
 			</div>
 		</div>
-
+		<script src="resource/js/lang.js" type="text/javascript" charset="utf-8"></script>
 		<script src="resource/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="resource/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="resource/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
@@ -426,19 +579,54 @@
 		<script src="resource/js/a/sjcl-bip39.js" type="text/javascript" charset="utf-8"></script>
 		<script src="resource/js/a/nacl_factory.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			if (localStorage.getItem("lang-flag")) {
+				// console.log(localStorage.getItem("lang-flag"));
+				$("#langFlag").val(localStorage.getItem("lang-flag"));
+			} else {
+				localStorage.setItem("lang-flag", "cn");
+			}
+			var langFlag = localStorage.getItem("lang-flag");
+
+
 			var cachedPrivateKeys = {};
 			var action;
 			var changeProxyStateM = "";
 			var changeProxyStateR = "";
 			var changeProxyStateS = "";
 			$(function() {
+
+
+				reloadLang();
+
 				loadPeers(); //加载节点信息列表
 				reloadData();
 
 				window.setInterval(getBlockProgress, 10000);
 			})
-			
-			function clearCreate(){
+
+			function reloadLang() {
+				// console.log(langFlag);
+				var oDiv = document.getElementsByClassName("lang-tag");
+				// console.log(oDiv);
+				for (var i = 0; i < oDiv.length; i++) {
+					// console.log(oDiv[i]);
+					var tagName = oDiv[i].className.split(/\s+/)[1];
+					// console.log(tagName);
+					oDiv[i].innerHTML = oLang[tagName][langFlag];
+				}
+
+			}
+
+
+
+			$("#langFlag").change(function() {
+				// console.log(this.value);
+				localStorage.setItem("lang-flag", this.value);
+				location.reload();
+			})
+
+
+			function clearCreate() {
 				$("#createdAccountW").val('');
 				$("#createdAccountA").val('');
 			}
@@ -477,9 +665,9 @@
 							var blocksCount = 0;
 							var state = "";
 							var btnHtml = "";
-							var inputHtml = '<input value="" id="' + aInfo.address + '"/ placeholder="输入待授权地址" style="width:300px">';
+							var inputHtml = '<input value="" id="' + aInfo.address + '"/ placeholder="'+oLang['Text4'][langFlag]+'" style="width:300px">';
 							if (aInfo.flags == 1) {
-								aLevel = "创世";
+								aLevel = oLang['Genesis'][langFlag];
 								axios.all([getBlocksForgers(aInfo.address)])
 									.then(axios.spread(function(blocksForgers) {
 
@@ -488,12 +676,11 @@
 											blocksCount += bfInfo[j].blockCount;
 										}
 										if (blocksCount >= 2500) {
-											state = "已达标";
-											btnHtml = '<button class="btn btn-sm" onclick = "enable(\'' + aInfo.address + '\')">授权</button>';
+											state = oLang['LevelReached'][langFlag];
+											btnHtml = '<button class="btn btn-sm" onclick = "enable(\'' + aInfo.address + '\')">'+oLang['EnableForging'][langFlag]+'</button>';
 										} else {
-											state = "未达标";
-											// btnHtml = '<button class="btn btn-sm" disabled="disabled">授权</button>';
-											btnHtml = '<button class="btn btn-sm" onclick = "enable(\'' + aInfo.address + '\')">授权</button>';
+											state = oLang['LevelUnreached'][langFlag];
+											btnHtml = '<button class="btn btn-sm" onclick = "enable(\'' + aInfo.address + '\')">'+oLang['EnableForging'][langFlag]+'</button>';
 										}
 
 										var html = '<tr><th scope="row">' + aInfo.address + '</th><td>' + blocksCount + '</td><td>' + aLevel +
@@ -507,7 +694,7 @@
 							}
 
 							if (aInfo.flags == 2) {
-								aLevel = "二代";
+								aLevel = oLang['Tier2'][langFlag];
 								axios.all([getBlocksForgers(aInfo.address)])
 									.then(axios.spread(function(blocksForgers) {
 
@@ -516,12 +703,11 @@
 											blocksCount += bfInfo[j].blockCount;
 										}
 										if (blocksCount >= 25) {
-											state = "已达标";
-											btnHtml = '<button class="btn btn-sm" onClick = "enable(\'' + aInfo.address + '\')">授权</button>';
+											state = oLang['LevelReached'][langFlag];
+											btnHtml = '<button class="btn btn-sm" onClick = "enable(\'' + aInfo.address + '\')">'+oLang['EnableForging'][langFlag]+'</button>';
 										} else {
-											state = "未达标";
-											// btnHtml = '<button class="btn btn-sm" disabled="disabled">授权</button>';
-											btnHtml = '<button class="btn btn-sm" onClick = "enable(\'' + aInfo.address + '\')">授权</button>';
+											state = oLang['LevelUnreached'][langFlag];
+											btnHtml = '<button class="btn btn-sm" onClick = "enable(\'' + aInfo.address + '\')">'+oLang['EnableForging'][langFlag]+'</button>';
 										}
 
 										var html = '<tr><th scope="row">' + aInfo.address + '</th><td>' + blocksCount + '</td><td>' + aLevel +
@@ -546,7 +732,7 @@
 			function enable(mintingAccount) {
 				var recipientAccount = $("#" + mintingAccount).val();
 				if (!recipientAccount) {
-					alert("被授权地址不能为空");
+					alert(oLang['Text5'][langFlag]);
 					return;
 				}
 				var privateKey = getPrivateKey(mintingAccount, enable, mintingAccount);
@@ -556,7 +742,7 @@
 						axios.all([getAddressInfo(mintingAccount), getAddressInfo(recipientAccount)])
 							.then(axios.spread(function(mInfo, rInfo) {
 								if (!rInfo.data.publicKey || !mInfo.data.publicKey) {
-									alert("授权地址或被授权地址未激活");
+									alert(oLang['Text6'][langFlag]);
 									return false;
 								}
 
@@ -583,7 +769,7 @@
 								axios.post(BASEURL + '/transactions/process', Base58.encode(tmp))
 									.then(function(res) {
 										if (res.data === true) {
-											alert('已提交');
+											alert(oLang['Submitted'][langFlag]);
 										}
 									})
 									.catch(function(error) {
@@ -614,7 +800,7 @@
 						axios.all([getAddressInfo(mintingAccount), getAddressInfo(recipientAccount)])
 							.then(axios.spread(function(mInfo, rInfo) {
 								if (!rInfo.data.publicKey || !mInfo.data.publicKey) {
-									alert("授权地址或被授权地址未激活");
+									alert(oLang['Text6'][langFlag]);
 									return false;
 								}
 								var mintingAccountPrkB58 = Base58.decode(mintingAccountPrk);
@@ -653,7 +839,7 @@
 								axios.post(BASEURL + '/transactions/process', Base58.encode(tmp))
 									.then(function(res) {
 										if (res.data === true) {
-											alert('已提交');
+											alert(oLang['Submitted'][langFlag]);
 										}
 									})
 									.catch(function(error) {
@@ -685,10 +871,10 @@
 						axios.get(BASEURL + '/addresses/' + account)
 							.then(function(res) {
 								if (!res.data.reference) {
-									layer.alert('原因可能如下：<br/>1.没有足够的MCF激活手续费', {
-										title: '激活失败!',
+									layer.alert(oLang['Text7'][langFlag], {
+										title: oLang['Text8'][langFlag],
 										closeBtn: 1,
-										btn: ['确定']
+										btn: [oLang['Confirm'][langFlag]]
 									});
 									return false;
 								} else {
@@ -712,7 +898,7 @@
 									axios.post(BASEURL + '/transactions/process', Base58.encode(tmp))
 										.then(function(res) {
 											if (res.data === true) {
-												alert('激活请求已提交');
+												alert(oLang['Text9'][langFlag]);
 											} else {
 												alert(res.data.message)
 											}
@@ -720,10 +906,10 @@
 										.catch(function(error) {
 											console.log(error);
 											if (error.data.error) {
-												layer.alert('原因可能如下：<br/>1.没有足够的MCF激活手续费', {
-													title: '激活失败!',
+												layer.alert(oLang['Text7'][langFlag], {
+													title: oLang['Text8'][langFlag],
 													closeBtn: 1,
-													btn: ['确定']
+													btn: [oLang['Confirm'][langFlag]]
 												});
 											}
 										});
@@ -744,7 +930,7 @@
 				var amount = $('#transferAmount').val();
 
 				if (!creatorAccount) {
-					alert("请选择地址");
+					alert(oLang['Text10'][langFlag]);
 					return false;
 				}
 
@@ -754,13 +940,14 @@
 						var privateKeyHex = nacl.to_hex((Base58.decode(privateKey)));
 						var kp = nacl.crypto_sign_seed_keypair(nacl.from_hex(privateKeyHex));
 						var publicKey = Base58.encode(kp.signPk);
+						console.log("publicKey:"+publicKey);
 						//时间戳
 						var timestamp = strAddZero(parseInt(new Date().getTime()).toString(16), 16);
 						/**根据地址获取reference**/
 						axios.get(BASEURL + '/addresses/' + creatorAccount)
 							.then(function(res) {
 								if (!res.data.reference) {
-									alert("账号未激活");
+									alert(oLang['Text11'][langFlag]);
 									return false;
 								} else {
 									var reference = nacl.to_hex(Base58.decode(res.data.reference));
@@ -793,7 +980,7 @@
 									axios.post(BASEURL + '/transactions/process', Base58.encode(tmp))
 										.then(function(res) {
 											if (res.data === true) {
-												alert('转账已提交');
+												alert(oLang['Text12'][langFlag]);
 											} else {
 												alert(res.data.message)
 											}
@@ -801,10 +988,10 @@
 										.catch(function(error) {
 											console.log(error);
 											if (error.data.error) {
-												layer.alert('原因可能如下：<br/>1.上一笔交易还未被区块确认<br/>2.当前转账资产种类余额不足<br/>3.没有足够的MCF转账手续费', {
-													title: '转账失败!',
+												layer.alert([oLang['Text13'][langFlag]], {
+													title: [oLang['Text14'][langFlag]],
 													closeBtn: 1,
-													btn: ['确定']
+													btn: [oLang['Confirm'][langFlag]]
 												});
 											}
 										});
@@ -855,9 +1042,9 @@
 											var adminForgingAccountsData = adminForgingAccounts.data;
 											for (var j = 0, proxyingProxiedDataLen = proxyingProxiedData.length; j < proxyingProxiedDataLen; j++) {
 												var blockCount = 0,
-													state = "已停止",
+													state = oLang['Stopped']['langFlag'],
 													btn = '<button class="btn btn-xs btn-success" onclick="changeProxyState(\'' + proxyingProxiedData[j].recipient +
-													'\',\'' + proxyingProxiedData[j].forger + '\',\'on\')">开始挖矿</botton>';
+													'\',\'' + proxyingProxiedData[j].forger + '\',\'on\')">' + oLang['Start'][langFlag] + '</botton>';
 												for (var k = 0, blocksForgersDataLen = blocksForgersData.length; k < blocksForgersDataLen; k++) {
 													if (blocksForgersData[k].forgedBy == proxyingProxiedData[j].forger && blocksForgersData[k].forgedFor ==
 														proxyingProxiedData[j].recipient) {
@@ -868,9 +1055,9 @@
 													adminForgingAccountsDataLen; l++) {
 													if (adminForgingAccountsData[l].proxiedBy == proxyingProxiedData[j].forger &&
 														adminForgingAccountsData[l].proxiedFor == proxyingProxiedData[j].recipient) {
-														state = "挖矿中";
+														state = oLang['Active'][langFlag];
 														btn = '<button class="btn btn-xs btn-primary" onclick="changeProxyState(\'' + proxyingProxiedData[j].recipient +
-															'\',\'' + proxyingProxiedData[j].forger + '\',\'off\')">停止挖矿</botton>';
+															'\',\'' + proxyingProxiedData[j].forger + '\',\'off\')">' + oLang['Stop'][langFlag] + '</botton>';
 													}
 												}
 												var htmlMintingProxyTable = '<tr><th scope="row">' + proxyingProxiedData[j].forger + '</th><td>' +
@@ -912,12 +1099,13 @@
 											var adminForgingAccountsData = adminForgingAccounts.data;
 											for (var j = 0, proxyingProxiedDataLen = proxyingProxiedData.length; j < proxyingProxiedDataLen; j++) {
 												var blockCount = 0,
-													state = "已停止",
+													state = oLang['Stopped'][langFlag],
 													btn = '<button class="btn btn-xs btn-primary" onclick="editProxy(\'' + proxyingProxiedData[j].forger +
 													'\',\'' + proxyingProxiedData[j].recipient + '\',\'' + proxyingProxiedData[j].share +
-													'\')">修改</botton><button class="btn btn-xs btn-success" onclick="changeProxyState(\'' +
+													'\')">' + oLang['Modify'][langFlag] +
+													'</botton><button class="btn btn-xs btn-success" onclick="changeProxyState(\'' +
 													proxyingProxiedData[j].forger + '\',\'' + proxyingProxiedData[j].recipient +
-													'\',\'on\')">开始挖矿</botton>';
+													'\',\'on\')">' + oLang['Start'][langFlag] + '</botton>';
 												for (var k = 0, blocksForgersDataLen = blocksForgersData.length; k < blocksForgersDataLen; k++) {
 													if (blocksForgersData[k].forgedBy == proxyingProxiedData[j].forger && blocksForgersData[k].forgedFor ==
 														proxyingProxiedData[j].recipient) {
@@ -928,12 +1116,13 @@
 													adminForgingAccountsDataLen; l++) {
 													if (adminForgingAccountsData[l].proxiedBy == proxyingProxiedData[j].forger &&
 														adminForgingAccountsData[l].proxiedFor == proxyingProxiedData[j].recipient) {
-														state = "挖矿中";
+														state = oLang['Active'][langFlag];
 														btn = '<button class="btn btn-xs btn-primary" onclick="editProxy(\'' + proxyingProxiedData[j].forger +
 															'\',\'' + proxyingProxiedData[j].recipient + '\',\'' + proxyingProxiedData[j].share +
-															'\')">修改</botton><button class="btn btn-xs btn-primary" onclick="changeProxyState(\'' +
+															'\')">' + oLang['Modify'][langFlag] +
+															'</botton><button class="btn btn-xs btn-primary" onclick="changeProxyState(\'' +
 															proxyingProxiedData[j].forger + '\',\'' + proxyingProxiedData[j].recipient +
-															'\',\'off\')">停止挖矿</botton>';
+															'\',\'off\')">' + oLang['Stop'][langFlag] + '</botton>';
 													}
 												}
 												var htmlMintingProxyTable = '<tr><th scope="row">' + proxyingProxiedData[j].forger + '</th><td>' +
@@ -984,7 +1173,7 @@
 						axios.all([getAddressInfo(mintingAccount), getAddressInfo(recipientAccount)])
 							.then(axios.spread(function(mInfo, rInfo) {
 								if (!rInfo.data.publicKey || !mInfo.data.publicKey) {
-									alert("授权地址或被授权地址未激活");
+									alert(oLang['Text6'][langFlag]);
 									return false;
 								}
 								var mintingAccountPrkB58 = Base58.decode(mintingAccountPrk);
@@ -1002,7 +1191,7 @@
 										axios.post(BASEURL + '/admin/forgingaccounts', Base58.encode(proxyPrivateKey))
 											.then(function(res) {
 												if (res.data === true) {
-													alert('添加成功');
+													alert(oLang['AddedSuccessfully'][langFlag]);
 												}
 											})
 											.catch(function(error) {
@@ -1015,7 +1204,7 @@
 											})
 											.then(function(res) {
 												if (res.data === true) {
-													alert('移除成功');
+													alert(oLang['RemovedSuccessfully'][langFlag]);
 												}
 											})
 											.catch(function(error) {
@@ -1064,7 +1253,7 @@
 				document.getElementById("page4AccountList").innerHTML = '';
 				document.getElementById("transferAccountList").innerHTML = '';
 				var accountInfo = getLocalStorage('accountInfo');
-				var transferAccountListOption = '<option value="">选择转出地址</option>';
+				var transferAccountListOption = '<option value="">' + oLang['ChooseAddress'][langFlag] + '</option>';
 				for (var i = 0; i < accountInfo.length; i++) {
 					transferAccountListOption += '<option value="' + accountInfo[i].account + '">' + accountInfo[i].account +
 						'</option>';
@@ -1077,15 +1266,16 @@
 									var strState = "Locked";
 								}
 								if (res.data.defaultGroupId === 2) {
-									var strBtn = '<button class="btn btn-default btn-sm" disabled="disabled">已激活</button>';
+									var strBtn = '<button class="btn btn-default btn-sm" disabled="disabled">' + oLang['Activated'][langFlag] +
+										'</button>';
 								} else {
 									var strBtn = '<button class="btn btn-success btn-sm" onclick="activateAcount(\'' + accountInfo[i].account +
-										'\')">未激活</button>';
+										'\')">' + oLang['Unactivated'][langFlag] + '</button>';
 								}
 								var strHtml = document.createElement("tr");
 								strHtml.innerHTML = '<th scope="row">' + accountInfo[i].account +
 									'</th><td>' + strState + '</td><td><button class="btn btn-sm" onclick="delAccount(\'' + accountInfo[i].account +
-									'\')">移除账户</button></td><td>' + strBtn +
+									'\')">' + oLang['Remove'][langFlag] + '</button></td><td>' + strBtn +
 									'</td>';
 								document.getElementById("page4AccountList").appendChild(strHtml)
 							})
@@ -1126,23 +1316,23 @@
 					'^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\W_!@#$%^&*`~()-+=]+$)(?![a-z0-9]+$)(?![a-z\W_!@#$%^&*`~()-+=]+$)(?![0-9\W_!@#$%^&*`~()-+=]+$)[a-zA-Z0-9\W_!@#$%^&*`~()-+=]{8,24}$'
 				);
 				if (mnemonicPhrase == "" || addAccountPwd1 == "") {
-					alert("助记词密码不能为空！")
+					alert(getLang('Text15'));
 					return null;
 				}
 				if (!regex.test(addAccountPwd1)) {
-					alert("密码不符合规则，请重新输入。");
+					alert(getLang('Text16'));
 					document.getElementById("addAccountPwd1").focus();
 					return;
 				}
 				if (addAccountPwd1 !== addAccountPwd2) {
-					alert("两次密码不相同，请重新输入。");
+					alert(getLang('Text17'));
 					document.getElementById("addAccountPwd1").focus();
 					return;
 				}
 				var mnemo = new Mnemonic("english");
 				var entropy = mnemo.revertEntropy(mnemonicPhrase);
 				if (!entropy) {
-					alert("助记词错误！");
+					alert(getLang('Text18'));
 					document.getElementById("mnemonicPhrase").focus();
 					return;
 				}
@@ -1152,7 +1342,7 @@
 			function getPrivateKey(account, func, params) {
 				var accountInfo = getLocalStorage('accountInfo');
 				if (!accountInfo) {
-					alert("未添加过账户");
+					alert(getLang('Text19'));
 					return false;
 				}
 
@@ -1161,8 +1351,8 @@
 
 				layer.prompt({
 					formType: 1,
-					placeholder: '请输入密码',
-					title: '请输入密码',
+					placeholder: getLang('Text20'),
+					title: getLang('Text20'),
 				}, function(pwd, index, elem) {
 					var naclPromise = nacl_factory.instantiate(function(nacl) {
 						for (var i = 0, accountInfoLen = accountInfo.length; i < accountInfoLen; i++) {
@@ -1182,7 +1372,7 @@
 						layer.close(index);
 					}).catch(function(reason) {
 						if (reason.message == "nacl_raw._crypto_secretbox_open signalled an error") {
-							alert("密码错误");
+							alert(getLang('WrongPassword'));
 						}
 						layer.close(index);
 					});
@@ -1269,8 +1459,9 @@
 							strHtml2 = "";
 						for (var i = 0, peersLen = peers.length; i < peersLen; i++) {
 							strHtml1 += '<tr><th scope="row">' + peers[i].address + '</th><td>' + peers[i].lastPing +
-								'</td><td>已连接</td><td>' + peers[i].version + '</td><td><button type="button" class="btn btn-danger btn-xs" onClick="changeNodeState(\'del\',\'' +
-								peers[i].address + '\')">删除节点</button></td></tr>';
+								'</td><td>' + oLang['Connected'][langFlag] + '</td><td>' + peers[i].version +
+								'</td><td><button type="button" class="btn btn-danger btn-xs" onClick="changeNodeState(\'del\',\'' +
+								peers[i].address + '\')">' + oLang['Delete'][langFlag] + '</button></td></tr>';
 						}
 						// for (var j = 0, peersKnownLen = peersKnown.length; j < peersKnownLen; j++) {
 						// 	if (JSON.stringify(peers).indexOf(peersKnown[j].address) == -1) {
@@ -1285,7 +1476,7 @@
 						for (var j = 0, peersKnownLen = peersKnown.length; j < peersKnownLen; j++) {
 							strHtml2 += '<tr><th scope="row">' + peersKnown[j].address +
 								'</th><td><button type="button" class="btn btn-success btn-xs" onClick="changeNodeState(\'add\',\'' +
-								peersKnown[j].address + '\')">添加节点</button></td></tr>';
+								peersKnown[j].address + '\')">' + oLang['Add'][langFlag] + '</button></td></tr>';
 						}
 
 						document.getElementById("listPeersKnown").innerHTML = strHtml2;
@@ -1301,7 +1492,7 @@
 				if (!node) {
 					node = trimStr(document.getElementById("nodeAddress").value);
 					if (!node) {
-						alert("请输入节点");
+						alert(getLang('Text21'));
 						return false;
 					}
 				}
@@ -1312,7 +1503,7 @@
 							.then(function(res) {
 								// console.log(res.data);
 								if (res.data === true) {
-									alert('添加成功');
+									alert(getLang('AddedSuccessfully'));
 								}
 							})
 							.catch(function(error) {
@@ -1326,9 +1517,9 @@
 							})
 							.then(function(res) {
 								if (res.data === true) {
-									alert('移除成功');
+									alert(getLang('RemovedSuccessfully'));
 								} else {
-									alert('该节点已移除')
+									alert(getLang('PeerRemoved'));
 								}
 							})
 							.catch(function(error) {
@@ -1349,9 +1540,9 @@
 					})
 					.then(function(res) {
 						if (res.data == true) {
-							alert('全部移除成功')
+							alert(getLang('Text22'))
 						} else {
-							alert('无可移除节点')
+							alert(getLang('Text23'))
 						}
 					})
 					.catch(function(error) {
